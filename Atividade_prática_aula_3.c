@@ -30,8 +30,6 @@ int calcularHash(char* chave){
 }
 
 void inserir(struct Elemento* tabela, char* nome_usuario, char* senha){
-    setlocale(LC_ALL, "pt_BR.UTF-8");
-
     int indice = calcularHash(nome_usuario);
     int inicial = indice;
     while (strcmp(tabela[indice].nome_usuario, "") != 0){
@@ -45,47 +43,35 @@ void inserir(struct Elemento* tabela, char* nome_usuario, char* senha){
     strcpy(tabela[indice].senha, senha);
 }
 
-char* pesquisar(struct Elemento* tabela, char* nome_usuario){
-    setlocale(LC_ALL, "pt_BR.UTF-8");
+void pesquisar(struct Elemento* tabela, char* nome_usuario){
 
     int indice = calcularHash(nome_usuario);
     int inicial = indice;
 
     while (strcmp(tabela[indice].nome_usuario, "") != 0){
         if(strcmp(tabela[indice].nome_usuario, nome_usuario) == 0){
-            printf("Usuário: %s | senha: %s", tabela[indice].nome_usuario, tabela[indice].senha);
-            return NULL;
+            printf("Usuário: %s | senha: %s\n", tabela[indice].nome_usuario, tabela[indice].senha);
         }
         indice = (indice + 1) % TAMANHO;
         if(indice == inicial) break;
     }
 }
 
-char pega_usuario(){
-    setlocale(LC_ALL, "pt_BR.UTF-8");
-
-    char nome_usuario[50];
-
+char pega_usuario(char* nome_usuario){
     printf("Digite seu nome de usuário:\n");
     fgets(nome_usuario, 50, stdin);
 
-    return nome_usuario;
+    nome_usuario[strcspn(nome_usuario, "\n")] = '\0';
 }
 
-char pega_senha(){
-    setlocale(LC_ALL, "pt_BR.UTF-8");
-
-    char senha[50];
-
+char pega_senha(char* senha){
     printf("Digite sua senha:\n");
     fgets(senha, 50, stdin);
 
-    return senha;
+    senha[strcspn(senha, "\n")] = '\0';
 }
 
 int menu(){
-    setlocale(LC_ALL, "pt_BR.UTF-8");
-
     int x;
 
     printf("Digite uma das opções abaixo:\n");
@@ -93,6 +79,7 @@ int menu(){
     printf("2 - Pesquisar usuário\n");
     printf("3 - sair\n");
     scanf("%d", &x);
+    getchar();
 
     return x;
 }
@@ -112,24 +99,27 @@ int main(){
 
         switch (x){
         case 1:
-            strcpy(usuario, pega_usuario());
-            strcpy(senha, pega_senha());
+            pega_usuario(usuario);
+            pega_senha(senha);
 
             inserir(tabela, usuario, senha);
             break;
 
         case 2:
-            strcpy(usuario, pega_usuario());
+            pega_usuario(usuario);
 
             pesquisar(tabela, usuario);
             break;
 
         case 3:
-            y == false;
+            y = false;
             break;
         
         default:
+            printf("Opção inválida!");
             break;
         }
     }
+    free(tabela);
+    return 0;
 }
