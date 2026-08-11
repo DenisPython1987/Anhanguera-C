@@ -1,3 +1,5 @@
+#include "atividade_pratica_2_heap_sort.h"
+
 void criaHeap(int *vet, int pai, int fim){
     int aux = vet[pai];
     int filho = 2 * pai + 1;
