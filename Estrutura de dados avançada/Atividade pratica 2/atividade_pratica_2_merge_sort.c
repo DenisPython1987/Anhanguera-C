@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "atividade_pratica_2_merge_sort.h"
 
 void merge(int *V, int inicio, int meio, int fim){
     int *temp, p1, p2, tamanho, i, j, k;

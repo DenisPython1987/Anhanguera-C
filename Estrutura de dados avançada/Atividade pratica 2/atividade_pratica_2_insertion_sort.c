@@ -1,3 +1,5 @@
+#include "atividade_pratica_2_insertion_sort.h"
+
 void insertionSort(int *V, int N){
     int i, j, atual;
     for(i = 1;i < N;i++){

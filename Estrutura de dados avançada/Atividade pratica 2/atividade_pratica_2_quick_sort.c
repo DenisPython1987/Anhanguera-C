@@ -1,3 +1,5 @@
+#include "atividade_pratica_2_quick_sort.h"
+
 int particiona(int *V, int inicio, int final){
     int esq, dir, pivo, aux;
     esq = inicio;
