@@ -31,14 +31,16 @@ int main() {
 
         switch (opcao) {
             case 1:
-                printf(">> Voce escolheu a Opcao 1.\n\n");
+                printf(">> Árvore AVL criada.\n\n");
                 break;
             case 2:
-                printf(">> Voce escolheu a Opcao 2.\n\n");
+                printf(">> Elemento inserido.\n\n");
                 break;
             case 3:
-                printf(">> Voce escolheu a Opcao 3.\n\n");
+                printf(">> Elemento removido.\n\n");
                 break;
+            case 4:
+                printf(">> O elemento %d já está na lista.\n\n");
             case 0:
                 printf(">> Saindo do programa...\n");
                 break;
