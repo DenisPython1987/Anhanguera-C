@@ -19,6 +19,7 @@ int main() {
         printf("1 - Criar árvore\n");
         printf("2 - Inserir elemento\n");
         printf("3 - Remover elemento\n");
+        printf("4 - Consultar elemento\n");
         printf("0 - Sair\n");
         printf("=======================\n");
         printf("Escolha uma opcao: ");
