@@ -10,15 +10,19 @@ void limparTela() {
     #endif
 }
 
+
+int valor, elemento, consulta, status;
+
 int main() {
+    ArvAVL *arvore = cria_ArvAVL();
     int opcao;
 
     do {
         printf("=======================\n");
         printf("     ÁRVORE AVL   \n");
         printf("=======================\n");
-        printf("1 - Criar árvore\n");
-        printf("2 - Inserir elemento\n");
+        printf("1 - Inserir elemento\n");
+        printf("2 - Mostrar árvore\n");
         printf("3 - Remover elemento\n");
         printf("4 - Consultar elemento\n");
         printf("0 - Sair\n");
@@ -31,16 +35,29 @@ int main() {
 
         switch (opcao) {
             case 1:
-                printf(">> Árvore AVL criada.\n\n");
+                printf("Digite o elemento a ser inserido: ");
+                scanf("%d", &valor);
+                insere_ArvAVL(arvore, valor);
+                printf(">> Elemento %d inserido.\n\n", valor);
                 break;
             case 2:
-                printf(">> Elemento inserido.\n\n");
+                emOrdem_ArvAVL(arvore);
                 break;
             case 3:
-                printf(">> Elemento removido.\n\n");
+                printf("Digite o elemento a ser removido: ");
+                scanf("%d", &elemento);
+                remove_ArvAVL(arvore, elemento);
+                printf(">> Elemento %d removido.\n\n", elemento);
                 break;
             case 4:
-                printf(">> O elemento %d já está na lista.\n\n");
+                printf("Digite o elemeno a consultar: ");
+                scanf("%d", &consulta);
+                status = consulta_ArvAVL(arvore, consulta);
+                if(status == 1)
+                    printf(">> O elemento %d está na árvore.\n\n", consulta);
+                else
+                    printf(">> O elemento %d não está na árvore.\n\n", consulta);                    
+                break;
             case 0:
                 printf(">> Saindo do programa...\n");
                 break;

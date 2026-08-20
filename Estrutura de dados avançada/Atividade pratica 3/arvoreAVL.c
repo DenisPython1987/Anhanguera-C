@@ -164,7 +164,7 @@ void RotacaoLL(ArvAVL *A){
     B->dir = *A;
 
     //Recalculando a altura da árvore após as modificações
-    (*A)->alt = maior(alt_NO((*A)->esq), alt_NO((*A)->dir));
+    (*A)->alt = maior(alt_NO((*A)->esq), alt_NO((*A)->dir)) + 1;
     B->alt = maior(alt_NO(B->esq), (*A)->alt) + 1;
 
     //A raiz A para a apontar para B
@@ -275,10 +275,23 @@ int insere_ArvAVL(ArvAVL *raiz, int valor){
     return res;
 }
 
+struct NO* procuraMenor(struct NO* atual){
+    struct NO *no1 = atual, *no2 = atual->esq;
+    while (no2 != NULL){
+        no1 = no2;
+        no2 = no2->esq;
+    }
+    return no1;
+    
+}
+
 int remove_ArvAVL(ArvAVL *raiz, int valor){
+    //Verifica se o ponteiro raiz é nulo
     if(*raiz == NULL) //Valor não existe
         return 0;
     int res;
+
+    /*Verificando se nó raiz é maior que o valor a ser removido*/
     if(valor < (*raiz)->info){
         if((res = remove_ArvAVL(&(*raiz)->esq, valor)) == 1){
             if(fatorBalanceamento_NO(*raiz) >= 2){
@@ -289,6 +302,8 @@ int remove_ArvAVL(ArvAVL *raiz, int valor){
             }
         }
     }
+
+    /*Verificando se o valor da raiz é menor que o valor a ser removido*/
     if((*raiz)->info < valor){
         if((res = remove_ArvAVL(&(*raiz)->dir, valor)) == 1){
             if(fatorBalanceamento_NO(*raiz) >= 2){
@@ -299,17 +314,64 @@ int remove_ArvAVL(ArvAVL *raiz, int valor){
             }
         }
     }
+
+    /*Verificando se o valor do nó é o mesmo do valor a ser removido, neste caso,
+    encontramos o nó a ser removido*/
     if((*raiz)->info == valor){
+
+        /*Verificando se nó é uma folha ou se tem apenas um filho*/
         if(((*raiz)->esq == NULL || (*raiz)->dir == NULL)){
             //Nó tem um filho ou nenhum
+            /*Copiando o nó raiz para um nó auxiliar*/
             struct NO *oldNode = (*raiz);
+
+            /*Transformando um dos nós filhos em nó pai*/
             if((*raiz)->esq != NULL)
                 *raiz = (*raiz)->esq;
             else
                 *raiz = (*raiz)->dir;
+
+            //Liberando da memória o nó a ser removido 
             free(oldNode);
+
         }else{//O nó tem dois filhos
-            struct NO* temp = p
+
+            //Procurando o menor dos nós filhos
+            struct NO* temp = procuraMenor((*raiz)->dir);
+            (*raiz)->info = temp->info;
+
+            //Removendo o nó raiz
+            remove_ArvAVL(&(*raiz)->dir, (*raiz)->info);
+
+            //Balanceando a árvore
+            if(fatorBalanceamento_NO(*raiz) >= 2){
+                if(alt_NO((*raiz)->esq->dir) <= alt_NO((*raiz)->esq->esq))
+                    RotacaoLL(raiz);
+                else
+                    RotacaoLR(raiz);
+            }
         }
+        if(*raiz != NULL)
+            (*raiz)->alt = maior(alt_NO((*raiz)->esq), alt_NO((*raiz)->dir)) + 1;
+    return 1;
     }
+    (*raiz)->alt = maior(alt_NO((*raiz)->esq), alt_NO((*raiz)->dir)) + 1;
+    return res;
+}
+
+int consulta_ArvAVL(ArvAVL *raiz, int valor){
+    if(raiz == NULL)
+        return 0;
+    struct NO* atual = *raiz;
+    while (atual != NULL){
+        if(valor == atual->info){
+            return 1;
+        }
+        if(valor > atual->info)
+            atual = atual->dir;
+        else
+            atual = atual->esq;
+    }
+    return 0;
+    
 }
