@@ -213,3 +213,103 @@ void RotacaoRL(ArvAVL *raiz){
     RotacaoRR(raiz);
 }
 
+int insere_ArvAVL(ArvAVL *raiz, int valor){
+    int res;
+
+    //Verificando se o valor do nó é NULL
+    if(*raiz == NULL){ //Árvore vazia ou nó folha
+        struct NO *novo;
+
+        //Alocando memória para o novo nó
+        //Retorna 0 se a alocação de memória não for possível
+        novo = (struct NO*)malloc(sizeof(struct NO));
+        if(novo == NULL)
+            return 0;
+        
+        /*Copiando o valor passado como parâmetro para o nó*/
+        novo->info = valor;
+
+        /*Como o nó é novo, seus filhos à esquerda e à direita têm NULL como
+        valor e a altura é zero*/
+        novo->alt = 0;
+        novo->esq = NULL;
+        novo->dir = NULL;
+
+        /*Por fim, passamos o valor para a raiz e retornamos 1 como sinal de 
+        sucesso na operação*/
+        *raiz = novo;
+        return 1;
+    }
+
+
+    struct NO *atual = *raiz;
+
+    /*Verifica se o valor do atual do nó é maior que valor a ser inserido*/
+    if(valor < atual->info){
+        if((res = insere_ArvAVL(&(atual->esq), valor)) == 1){
+            if(fatorBalanceamento_NO(atual) >= 2){
+                if(valor < (*raiz)->esq->info)
+                    RotacaoLL(raiz);
+                else
+                    RotacaoLR(raiz);
+            }
+        }
+    }else{
+        //Verificando se o valor atual do nó é menor que valor a ser inserido
+        if(valor > atual->info){
+            if((res = insere_ArvAVL(&(atual->dir), valor)) == 1){
+                if(fatorBalanceamento_NO(atual) >= 2){
+                    if((*raiz)->dir->info < valor)
+                        RotacaoRR(raiz);
+                    else
+                        RotacaoRL(raiz);
+                }
+            }
+
+        /*Retorna zero caso o valor atual do nó seja o mesmo do valor a ser
+        inserido*/
+        }else //Valor duplicado
+            return 0;
+    }
+    atual->alt=maior(alt_NO(atual->esq), alt_NO(atual->dir)) + 1;
+    return res;
+}
+
+int remove_ArvAVL(ArvAVL *raiz, int valor){
+    if(*raiz == NULL) //Valor não existe
+        return 0;
+    int res;
+    if(valor < (*raiz)->info){
+        if((res = remove_ArvAVL(&(*raiz)->esq, valor)) == 1){
+            if(fatorBalanceamento_NO(*raiz) >= 2){
+                if(alt_NO((*raiz)->dir->esq) <= alt_NO((*raiz)->dir->dir))
+                    RotacaoRR(raiz);
+                else
+                    RotacaoRL(raiz);
+            }
+        }
+    }
+    if((*raiz)->info < valor){
+        if((res = remove_ArvAVL(&(*raiz)->dir, valor)) == 1){
+            if(fatorBalanceamento_NO(*raiz) >= 2){
+                if(alt_NO((*raiz)->esq->dir) <= alt_NO((*raiz)->esq->esq))
+                    RotacaoLL(raiz);
+                else
+                    RotacaoLR(raiz);        
+            }
+        }
+    }
+    if((*raiz)->info == valor){
+        if(((*raiz)->esq == NULL || (*raiz)->dir == NULL)){
+            //Nó tem um filho ou nenhum
+            struct NO *oldNode = (*raiz);
+            if((*raiz)->esq != NULL)
+                *raiz = (*raiz)->esq;
+            else
+                *raiz = (*raiz)->dir;
+            free(oldNode);
+        }else{//O nó tem dois filhos
+            struct NO* temp = p
+        }
+    }
+}
